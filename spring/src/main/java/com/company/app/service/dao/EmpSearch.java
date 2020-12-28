@@ -1,0 +1,12 @@
+package com.company.app.service.dao;
+
+import lombok.Data;
+
+@Data
+public class EmpSearch extends Emp{
+	Integer minSalary;
+	Integer maxSalary;
+	Integer first;
+	Integer last;
+	String[] list;
+}

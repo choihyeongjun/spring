@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.company.app.service.dao.EmpMapper">
+	<update id="updateEmp"><!-- 업데이트는 리턴값없음 -->
+		update Employees
+		<set>
+		<if test="firstName!=null">FIRST_NAME=#{firstName},</if>
+			<if test="lastName!=null">LAST_NAME=#{lastName},</if>
+			<if test="salary!=null">SALARY=#{salary},</if>
+		</set>
+		where employee_id=#{employeeId}
+	</update> 
+	<!-- 부서별 사원 수 부서명,사원수 -->
+	<select id="getStatDept" resultType="map">
+		SELECT A.DEPARTMENT_ID,
+		B.DEPARTMENT_NAME,
+		COUNT(*) CNT
+		FROM EMPLOYEES A,DEPARTMENTS B
+		WHERE A.DEPARTMENT_ID=B.DEPARTMENT_ID
+		GROUP BY A.DEPARTMENT_ID,B.DEPARTMENT_NAME
+	</select>
+<!-- 단건조회  -->
+	<select id="getEmp" parameterType="emp" resultType="emp">
+		SELECT  
+				employee_id,
+				department_id,
+				salary,
+		        first_name,
+				last_name,
+				email,
+				hire_date,
+				job_id
+		FROM employees
+		WHERE employee_id = #{employeeId}
+	</select>
+<!-- 전체 레코드 건수 -->
+<select id="getCount" resultType="int">
+	SELECT COUNT(*) FROM EMPLOYEES
+	
+</select>
+<!-- 전체조회  -->	
+	<select id="getEmpList" resultType="emp">
+		SELECT * 
+		  FROM employees 
+		  <where>
+		  	<if test="firstName!=null and firstName!=''">
+		  		lower(FIRST_NAME) like '%' || #{firstName} || '%'
+		  	</if>
+		  	<if test="departmentId!=null">
+		  		AND DEPARTMENT_ID=#{departmentId}
+		  	</if>
+		  	<if test="minSalary!=null and maxSalary!=null">
+		  		  AND SALARY BETWEEN #{minSalary} AND #{maxSalary}
+		  	</if>
+		  	</where>
+	</select>
+	<!-- 프로시저를 이용한등록 -->
+	<insert id="insertEmpProc" statementType="CALLABLE">
+		{call INS_EMP(
+			#{lastName},
+			#{email},
+			#{jobId},
+			#{msg, mode=OUT,jdbcType=VARCHAR,javaType=string},
+			#{employeeId, mode=OUT,jdbcType=VARCHAR,javaType=string}
+		)}
+	</insert>
+<!--  사원등록    -->
+	<insert id="insertEmp" parameterType="emp">
+	<selectKey order="BEFORE"
+				keyProperty="employeeId" resultType="string">
+		SELECT MAX(EMPLOYEE_ID)+1
+			FROM EMPLOYEES
+	</selectKey>
+		INSERT INTO EMPLOYEES (	employee_id, 
+								first_name, 
+								last_name,
+								email,
+								hire_date,
+								job_id
+								)
+	 	                VALUES(
+	 	               			#{employeeId},
+	 	               			#{firstName},
+	 	               			#{lastName},
+	 	               			#{email},
+	 	               			#{hireDate},
+	 	               			#{jobId})
+	</insert>
+	<!-- 단건삭제 -->
+	<delete id="delteEmp">
+		DELETE EMPLOYEES
+		WHERE EMPLOYEE_ID=#{employeeId}
+	</delete>
+	<!-- 선택 다건 삭제 -->
+	<delete id="deleteMultiEmp">
+		DELETE EMPLOYEES
+		WHERE EMPLOYEE_ID IN
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+		#{id}
+		
+		</foreach>
+	</delete>
+	<!-- jobid select option -->
+	<select id="jobSelect" resultType="com.company.app.service.dao.Jobs">
+		SELECT JOB_ID,JOB_TITLE
+		FROM JOBS
+		ORDER BY JOB_ID
+	</select>
+	<!-- departmentId select option -->
+	<select id="deptSelect" resultType="com.company.app.service.dao.Dept">
+		SELECT DEPARTMENT_ID,DEPARTMENT_NAME
+		FROM DEPARTMENTS
+		ORDER BY DEPARTMENT_ID
+	</select>
+	
+	
+</mapper>
