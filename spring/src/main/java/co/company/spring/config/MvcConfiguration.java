@@ -3,6 +3,7 @@ package co.company.spring.config;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -19,6 +20,7 @@ import co.company.spring.common.AuthCheckInterceptor;
 
 @Configuration
 @EnableWebMvc//annotation-driven
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class MvcConfiguration implements WebMvcConfigurer{
 	/**
 	 * 언어 변경을 위한 인터셉터를 생성한다.
