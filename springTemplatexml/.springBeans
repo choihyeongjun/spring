@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[3.9.8.201903260659-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[3.9.15.202012132202-CI-B2750]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
+		<config>src/main/resources/config/security-context.xml</config>
 	</configs>
 	<autoconfigs>
+		<config>src/main/resources/config/common-context.xml</config>
+		<config>src/main/resources/config/datasource-context.xml</config>
+		<config>src/main/resources/config/mybatis-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
 	</autoconfigs>
 	<configSets>

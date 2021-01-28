@@ -1,6 +1,8 @@
 package com.dbal.app.emp.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,9 @@ public class EmpController  {
     @RequestMapping("empList")
     public String empList(Model model) {
         model.addAttribute("empList", empService.getEmpList(null));
+        UserDetails userDetails =
+        		(UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return "emp/empList";
     }
     

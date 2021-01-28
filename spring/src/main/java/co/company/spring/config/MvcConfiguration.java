@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import co.company.spring.common.AuthCheckInterceptor;
@@ -82,6 +83,12 @@ public class MvcConfiguration implements WebMvcConfigurer{
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 		//이거없으면 이미지 넣을때 에러뜸 조심
+	}
+	@Bean
+	BeanNameViewResolver beanNameViewResolver() {
+		BeanNameViewResolver bean=new BeanNameViewResolver();
+		bean.setOrder(1);
+		return bean;
 	}
 	
 	
